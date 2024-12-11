@@ -1,43 +1,69 @@
+import random
+
 # Base Character class
 class Character:
-    def __init__(self, name, health, attack_power):
+    def __init__(self, name, health, attack_power, special_attack_name, special_attack_multiplier):
         self.name = name
         self.health = health
         self.attack_power = attack_power
+        self.special_attack_name = special_attack_name
+        self.special_attack_multiplier = special_attack_multiplier
         self.max_health = health  # Store the original health for maximum limit
 
     def attack(self, opponent):
-        opponent.health -= self.attack_power
-        print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
+        damage_amount = random.randint(1, self.attack_power)
+        opponent.health -= damage_amount
+        print(f"{self.name} attacks {opponent.name} for {damage_amount} damage!")
         if opponent.health <= 0:
             print(f"{opponent.name} has been defeated!")
+
+    def special_attack(self, opponent):
+        special_attack_damage = self.attack_power * self.special_attack_multiplier
+        opponent.health -=  special_attack_damage
+        print(f"{self.name} uses {self.special_attack_name} against {opponent.name} for {special_attack_damage} damage!")
+        if opponent.health <= 0:
+            print(f"{opponent.name} has been defeated!") 
 
     def display_stats(self):
         print(f"{self.name}'s Stats - Health: {self.health}/{self.max_health}, Attack Power: {self.attack_power}")
 
     # Add your heal method here
-
+    def heal(self):
+        healing_amount = random.randint(1, (self.max_health - self.health))
+        self.health += healing_amount
+        print(f"You have healed yourself by {healing_amount} and your current health level is {self.health}")
 
 # Warrior class (inherits from Character)
 class Warrior(Character):
     def __init__(self, name):
-        super().__init__(name, health=140, attack_power=25)  # Boost health and attack power
+        super().__init__(name, health=140, attack_power=25, special_attack_name="Power Attack", special_attack_multiplier = 1.5)  # Boost health and attack power
 
     # Add your power attack method here
-
-
+    # Inherited from parent Character class - special_attack()
+    
 # Mage class (inherits from Character)
 class Mage(Character):
     def __init__(self, name):
-        super().__init__(name, health=100, attack_power=35)  # Boost attack power
+        super().__init__(name, health=100, attack_power=35, special_attack_name="Cast Spell", special_attack_multiplier = 2)  # Boost attack power
 
     # Add your cast spell method here
+    # Inherited from parent Character class - special_attack()
 
+## TWO ADDITIONAL CLASSES ##
+# Archer class (inherits from Character)
+class Archer(Character):
+    def __init__(self, name):
+        super().__init__(name, health=150, attack_power=40, special_attack_name="Quick Shot", special_attack_multiplier = 2.5)  # Boost attack power
+
+# Paladin class (inherits from Character)
+class Paladin(Character):
+    def __init__(self, name):
+        super().__init__(name, health=125, attack_power=25, special_attack_name="Holy Strike", special_attack_multiplier = 4)
 
 # EvilWizard class (inherits from Character)
 class EvilWizard(Character):
     def __init__(self, name):
-        super().__init__(name, health=150, attack_power=15)  # Lower attack power
+        super().__init__(name, health=150, attack_power=15, special_attack_name="", special_attack_multiplier=1)  # Lower attack power
     
     # Evil Wizard's special ability: it can regenerate health
     def regenerate(self):
@@ -60,11 +86,9 @@ def create_character():
     elif class_choice == '2':
         return Mage(name)
     elif class_choice == '3':
-        # Add Archer class here
-        pass
+        return Archer(name)
     elif class_choice == '4':
-        # Add Paladin class here
-        pass
+        return Paladin(name)
     else:
         print("Invalid choice. Defaulting to Warrior.")
         return Warrior(name)
@@ -83,11 +107,9 @@ def battle(player, wizard):
         if choice == '1':
             player.attack(wizard)
         elif choice == '2':
-            # Call the special ability here
-            pass  # Implement this
+            player.special_attack(wizard)
         elif choice == '3':
-            # Call the heal method here
-            pass  # Implement this
+            player.heal()
         elif choice == '4':
             player.display_stats()
         else:
