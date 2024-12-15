@@ -34,17 +34,18 @@ __| |___) )  \ \__/ /   ___/ /     ( (        _
 ## BASE CHARACTER CLASS ##
 class Character:
     # Basic Character Info
-    def __init__(self, name, health, attack_power, health_lost=0, healing_turns=3, special_attack_turns=2):
+    def __init__(self, name, health, attack_power, health_lost=0, healing_turns=3, special_attack_turns=4):
         self.name = name
         self.health = health
         self.attack_power = attack_power
-        self.special_attack_turns = special_attack_turns
-        self.healing_turns = healing_turns
+        self.special_attack_turns = special_attack_turns # Limited number of Special Attack turns
+        self.healing_turns = healing_turns # Limited number of Healing turns 
         self.max_health = health  # Store the original health for maximum limit
         self.health_lost = health_lost #Store the last amount of health lost for evade/heal methods
         self.attack_occurred = False
 
-    # Attack Method
+    # Attack Method - Player will attack with a random amount 
+    # of damage between 1 and the character's attack_power
     def attack(self, opponent):
         damage_done = math.ceil(self.attack_power * (random.random()))
         self.health_lost = damage_done
@@ -54,7 +55,8 @@ class Character:
         if type(self).__name__ == "EvilWizard":
             print(f"Current Stats: {opponent.name} - {opponent.health} vs. {self.name} - {self.health}\n")
 
-    # Heal Method
+    # Heal Method - Player will heal themselves in a random amount between
+    # 1 and the difference between the player's max health and their current health
     def heal(self):
         if self.healing_turns > 0:
             healing_amount = random.randint(1, (self.max_health - self.health))
@@ -65,12 +67,14 @@ class Character:
         else:
             print("You are out of healing turns. Returning to the main menu...\n")
 
-    # Special Attack Power Random Multiplier
+    # Special Attack Power Random Multiplier Helper Method
+    # Randomly select a multiplier for the attack_power between 1-3x
     def special_attack_multiplier(self):
         multiplier = math.ceil(random.random() * random.randint(1,3))
         return multiplier
     
-    # Display the current stats 
+    # Display Stats Method - Show the current stats for both the player and their opponent
+    # so that the player can make decisions about their next action
     def display_stats(self, opponent):
         print("\n************")
         print(f"{self.name}'s Stats - Health: {self.health}/{self.max_health}, Attack Power: {self.attack_power}")
@@ -84,6 +88,8 @@ class Warrior(Character):
     def __init__(self, name):
         super().__init__(name, health=140, attack_power=25)  # Boost health and attack power
 
+    # Special Abilities Method - Allow the player to select the special ability
+    # they want to use if they have special attacks available and run the matching method
     def special_abilities(self, opponent):
         if self.special_attack_turns > 0:
             ability_choice = input("Which ability would you like to use? 1 - Power Attack | 2 - Duck Defense  ")
@@ -101,13 +107,13 @@ class Warrior(Character):
         else:
             print("You are out of special attack turns. Returning to main menu...\n")
     
-    # Power Attack Special Ability Method
+    # Power Attack Special Ability Method - Offensive
     def power_attack(self, opponent):
         special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Power Attack against {opponent.name} for {special_attack_damage} damage!")
 
-    # Duck Defense Special Ability Method
+    # Duck Defense Special Ability Method - Defensive
     def duck_defense(self):
         if (self.attack_occurred):
             self.health += self.health_lost
@@ -118,6 +124,8 @@ class Mage(Character):
     def __init__(self, name):
         super().__init__(name, health=100, attack_power=35)  # Boost attack power
 
+    # Special Abilities Method - Allow the player to select the special ability
+    # they want to use if they have special attacks available and run the matching method
     def special_abilities(self, opponent):
         if self.special_attack_turns > 0:
             ability_choice = input("Which ability would you like to use? 1 - Cast Spell | 2 - Restore Spell  ")
@@ -134,12 +142,13 @@ class Mage(Character):
         else:
             print("You are out of special attack turns. Returning to main menu...\n")
             
-    # Add your cast spell method here
+    # Cast Spell Special Ability Method - Offensive
     def cast_spell(self, opponent):
         special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Cast Spell against {opponent.name} for {special_attack_damage} damage!")
-        
+    
+    # Restore Spell Special Ability Method - Defensive  
     def restore_spell(self):
         if (self.attack_occurred):
             self.health += self.health_lost
@@ -150,6 +159,8 @@ class Archer(Character):
     def __init__(self, name):
         super().__init__(name, health=150, attack_power=40)  # Boost attack power
 
+    # Special Abilities Method - Allow the player to select the special ability
+    # they want to use if they have special attacks available and run the matching method
     def special_abilities(self, opponent):
         if self.special_attack_turns > 0:
             ability_choice = input("Which ability would you like to use? 1 - Quick Shot | 2 - Evade Attack  ")
@@ -167,11 +178,13 @@ class Archer(Character):
         else:
             print("You are out of special attack turns. Returning to main menu...\n")
 
+    # Quick Shot Special Ability Method - Offensive
     def quick_shot(self, opponent):
         special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Quick Shot against {opponent.name} for {special_attack_damage} damage!\n")
 
+    # Evade Special Ability Method - Defensive
     def evade_attack(self):
         if (self.attack_occurred):
             self.health += self.health_lost
@@ -182,6 +195,8 @@ class Paladin(Character):
     def __init__(self, name):
         super().__init__(name, health=125, attack_power=25)
 
+    # Special Abilities Method - Allow the player to select the special ability
+    # they want to use if they have special attacks available and run the matching method
     def special_abilities(self, opponent):
         if self.special_attack_turns > 0:
             ability_choice = input("Which ability would you like to use? 1 - Holy Strike | 2 - Divine Shield  ")
@@ -196,12 +211,14 @@ class Paladin(Character):
             print(f"** You now have {self.special_attack_turns} special attacks remaining. Use them wisely! **\n")
         else:
             print("You are out of special attack turns. Returning to main menu...\n")        
-    
+
+    # Holy Strike Special Ability Method - Offensive
     def holy_strike(self, opponent):
         special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Holy Strike against {opponent.name} for {special_attack_damage} damage!")
 
+    # Divine Shield Special Ability Method - Defensive
     def divine_shield(self):
         self.health += self.health_lost
         self.attack_occurred = False
@@ -278,6 +295,8 @@ def battle(player, wizard):
             wizard.regenerate()
             wizard.attack(player)
 
+    # End Game Messages - Displays the appropriate message for the player
+    # win or opponent win with ASCII art and a message set
     if wizard.health <= 0 or player.health <= 0:
         print("\n*********************")
         if (wizard.health <= 0):
