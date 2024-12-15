@@ -1,3 +1,4 @@
+import math
 import random
 
 # *** START of CHARACTER CREATION FUNCTIONALITY *** # 
@@ -14,15 +15,12 @@ class Character:
 
     # Attack Method
     def attack(self, opponent):
-        damage_amount = random.randint(1, self.attack_power)
-        self.health_lost = damage_amount
-        opponent.health -= damage_amount
+        self.health_lost = self.attack_power
+        opponent.health -= self.attack_power
         self.attack_occurred = True
-        print(f"{self.name} attacks {opponent.name} for {damage_amount} damage!")
+        print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
         if type(self).__name__ == "EvilWizard":
             print(f"Current Stats: {opponent.name} - {opponent.health} vs. {self.name} - {self.health}\n")
-        # if opponent.health <= 0:
-        #     print(f"{opponent.name} has been defeated!\n")
 
     # Heal Method
     def heal(self):
@@ -32,7 +30,9 @@ class Character:
 
     # Special Attack Power Random Multiplier
     def special_attack_multiplier(self):
-        return random.randint(1.1, 10) * self.attack_power
+        multiplier = math.ceil(random.random() * random.randint(1,3))
+        print("multiplier: ", multiplier)
+        return multiplier
     
     # Display the current stats 
     def display_stats(self):
@@ -49,20 +49,20 @@ class Warrior(Character):
 
     def special_abilities(self, opponent):
         ability_choice = input("Which ability would you like to use? 1 - Power Attack | 2 - Duck Defense  ")
-        if (ability_choice == 1):
+        if (ability_choice == "1"):
             self.power_attack(opponent)
-        elif (ability_choice == 2):
+        elif (ability_choice == "2"):
             self.duck_defense()
 
     # Power Attack Method
     def power_attack(self, opponent):
-        special_attack_damage = self.attack_power * self.special_attack_multiplier
+        print("In power attack mode...")
+        special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Power Attack against {opponent.name} for {special_attack_damage} damage!")
-        # if opponent.health <= 0:
-        #     print(f"{opponent.name} has been defeated!")
-
+        
     def duck_defense(self):
+        print("In duck defense mode...")
         if (self.attack_occurred):
             self.health += self.health_lost
             self.attack_occurred = False
@@ -81,12 +81,10 @@ class Mage(Character):
 
     # Add your cast spell method here
     def cast_spell(self, opponent):
-        special_attack_damage = self.attack_power * self.special_attack_multiplier
+        special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Cast Spell against {opponent.name} for {special_attack_damage} damage!")
-        # if opponent.health <= 0:
-        #     print(f"{opponent.name} has been defeated!")
-
+        
     def restore_spell(self):
         if (self.attack_occurred):
             self.health += self.health_lost
@@ -105,12 +103,10 @@ class Archer(Character):
             self.evade_attack()
 
     def quick_shot(self, opponent):
-        special_attack_damage = self.attack_power * self.special_attack_multiplier
+        special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Quick Shot against {opponent.name} for {special_attack_damage} damage!")
         self.display_stats()
-        # if opponent.health <= 0:
-        #     print(f"{opponent.name} has been defeated!")
 
     def evade_attack(self):
         if (self.attack_occurred):
@@ -130,11 +126,9 @@ class Paladin(Character):
             self.divine_shield()
 
     def holy_strike(self, opponent):
-        special_attack_damage = self.attack_power * self.special_attack_multiplier
+        special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Holy Strike against {opponent.name} for {special_attack_damage} damage!")
-        # if opponent.health <= 0:
-        #     print(f"{opponent.name} has been defeated!")
 
     def divine_shield(self):
         self.health += self.health_lost
