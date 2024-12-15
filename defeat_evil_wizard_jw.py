@@ -1,6 +1,35 @@
 import math
 import random
 
+# *** END GAME ASCII ART *** #
+win_ascii = '''
+ __    __    _____     ____   ________     ____     ______    __      __
+ ) )  ( (   (_   _)   / ___) (___  ___)   / __ \   (   __ \   ) \    / (
+( (    ) )    | |    / /         ) )     / /  \ \   ) (__) )   \ \  / / 
+ \ \  / /     | |   ( (         ( (     ( ()  () ) (    __/     \ \/ /  
+  \ \/ /      | |   ( (          ) )    ( ()  () )  ) \ \  _     \  /    
+   \  /      _| |__  \ \___     ( (      \ \__/ /  ( ( \ \_))     )(    
+    \/      /_____(   \____)    /__\      \____/    )_) \__/     /__\                                                                                                                               
+'''
+
+loss_ascii = '''
+__      __    ____     __    __                   
+) \    / (   / __ \    ) )  ( (                   
+ \ \  / /   / /  \ \  ( (    ) )                  
+  \ \/ /   ( ()  () )  ) )  ( (                   
+   \  /    ( ()  () ) ( (    ) )                  
+    )(      \ \__/ /   ) \__/ (                   
+   /__\      \____/    \______/                   
+                                                  
+ _____         ____      _____   ________  _______
+(_   _)       / __ \    / ____\ (___  ___) \     /
+  | |        / /  \ \  ( (___       ) )     \   / 
+  | |       ( ()  () )  \___ \     ( (       ) (  
+  | |   __  ( ()  () )      ) )     ) )      \_/  
+__| |___) )  \ \__/ /   ___/ /     ( (        _   
+\________/    \____/   /____/      /__\      (_)  
+'''
+
 # *** START of CHARACTER CREATION FUNCTIONALITY *** # 
 ## BASE CHARACTER CLASS ##
 class Character:
@@ -15,10 +44,11 @@ class Character:
 
     # Attack Method
     def attack(self, opponent):
-        self.health_lost = self.attack_power
-        opponent.health -= self.attack_power
+        damage_done = math.ceil(self.attack_power * (random.random()))
+        self.health_lost = damage_done
+        opponent.health -= damage_done
         self.attack_occurred = True
-        print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
+        print(f"{self.name} attacks {opponent.name} for {damage_done} damage!")
         if type(self).__name__ == "EvilWizard":
             print(f"Current Stats: {opponent.name} - {opponent.health} vs. {self.name} - {self.health}\n")
 
@@ -53,16 +83,16 @@ class Warrior(Character):
             self.power_attack(opponent)
         elif (ability_choice == "2"):
             self.duck_defense()
+        else:
+            print("Invalid choice. Returning to the main menu...")
 
     # Power Attack Method
     def power_attack(self, opponent):
-        print("In power attack mode...")
         special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Power Attack against {opponent.name} for {special_attack_damage} damage!")
         
     def duck_defense(self):
-        print("In duck defense mode...")
         if (self.attack_occurred):
             self.health += self.health_lost
             self.attack_occurred = False
@@ -78,7 +108,9 @@ class Mage(Character):
             self.cast_spell(opponent)
         elif (ability_choice == "2"):
             self.restore_spell()
-
+        else:
+            print("Invalid choice. Returning to the main menu...")
+            
     # Add your cast spell method here
     def cast_spell(self, opponent):
         special_attack_damage = self.attack_power * self.special_attack_multiplier()
@@ -101,7 +133,9 @@ class Archer(Character):
             self.quick_shot(opponent)
         elif (ability_choice == "2"):
             self.evade_attack()
-
+        else:
+            print("Invalid choice. Returning to the main menu...")
+            
     def quick_shot(self, opponent):
         special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
@@ -123,7 +157,9 @@ class Paladin(Character):
             self.holy_strike(opponent)
         elif (ability_choice == "2"):
             self.divine_shield()
-
+        else:
+            print("Invalid choice. Returning to the main menu...")
+            
     def holy_strike(self, opponent):
         special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
@@ -208,9 +244,11 @@ def battle(player, wizard):
     if wizard.health <= 0 or player.health <= 0:
         print("\n*********************")
         if (wizard.health <= 0):
+            print(win_ascii)
             print(f"{wizard.name} has been defeated by {player.name}!")
         else:
-            print(f"{player.name} has been defeated by {wizard.name}!")
+            print(loss_ascii)
+            print(f"OH NO! You the {player.name} has been defeated by {wizard.name}!")
         print("Thank you for playing the Defeat the Evil Wizard by JeniDub")
         print("*********************\n")
 
