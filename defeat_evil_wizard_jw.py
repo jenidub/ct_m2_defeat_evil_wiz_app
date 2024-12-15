@@ -57,10 +57,10 @@ class Character:
     # Heal Method
     def heal(self):
         if self.healing_turns > 0:
-            self.healing_turns -= 1
             healing_amount = random.randint(1, (self.max_health - self.health))
             self.health += healing_amount
             print(f"You have healed yourself by {healing_amount} and your current health level is {self.health}")
+            self.healing_turns -= 1
             print(f"** You now have {self.healing_turns} healing packs remaining. Use them wisely! **\n")
         else:
             print("You are out of healing turns. Returning to the main menu...\n")
@@ -86,15 +86,18 @@ class Warrior(Character):
 
     def special_abilities(self, opponent):
         if self.special_attack_turns > 0:
-            self.special_attack_turns -= 1
             ability_choice = input("Which ability would you like to use? 1 - Power Attack | 2 - Duck Defense  ")
             if (ability_choice == "1"):
                 self.power_attack(opponent)
+                self.special_attack_turns -= 1
+                print(f"** You now have {self.special_attack_turns} special attacks remaining. Use them wisely! **\n")
+
             elif (ability_choice == "2"):
                 self.duck_defense()
+                self.special_attack_turns -= 1
+                print(f"** You now have {self.special_attack_turns} special attacks remaining. Use them wisely! **\n")
             else:
                 print("Invalid choice. Returning to the main menu...")
-            print(f"** You now have {self.special_attack_turns} special attacks remaining. Use them wisely! **\n")
         else:
             print("You are out of special attack turns. Returning to main menu...\n")
     
@@ -120,10 +123,14 @@ class Mage(Character):
             ability_choice = input("Which ability would you like to use? 1 - Cast Spell | 2 - Restore Spell  ")
             if (ability_choice == "1"):
                 self.cast_spell(opponent)
+                self.special_attack_turns -= 1
             elif (ability_choice == "2"):
                 self.restore_spell()
+                self.special_attack_turns -= 1
             else:
                 print("Invalid choice. Returning to the main menu...\n")
+            
+            print(f"** You now have {self.special_attack_turns} special attacks remaining. Use them wisely! **\n")
         else:
             print("You are out of special attack turns. Returning to main menu...\n")
             
@@ -148,10 +155,15 @@ class Archer(Character):
             ability_choice = input("Which ability would you like to use? 1 - Quick Shot | 2 - Evade Attack  ")
             if (ability_choice == "1"):
                 self.quick_shot(opponent)
+                self.special_attack_turns -= 1
             elif (ability_choice == "2"):
                 self.evade_attack()
+                self.special_attack_turns -= 1
             else:
                 print("Invalid choice. Returning to the main menu...")
+            
+            print(f"** You now have {self.special_attack_turns} special attacks remaining. Use them wisely! **\n")
+        
         else:
             print("You are out of special attack turns. Returning to main menu...\n")
 
@@ -175,10 +187,13 @@ class Paladin(Character):
             ability_choice = input("Which ability would you like to use? 1 - Holy Strike | 2 - Divine Shield  ")
             if (ability_choice == "1"):
                 self.holy_strike(opponent)
+                self.special_attack_turns -= 1
             elif (ability_choice == "2"):
                 self.divine_shield()
+                self.special_attack_turns -= 1
             else:
                 print("Invalid choice. Returning to the main menu...\n")
+            print(f"** You now have {self.special_attack_turns} special attacks remaining. Use them wisely! **\n")
         else:
             print("You are out of special attack turns. Returning to main menu...\n")        
     
@@ -199,8 +214,11 @@ class EvilWizard(Character):
     
     # Evil Wizard's special ability: it can regenerate health
     def regenerate(self):
-        self.health += 5  # Lower regeneration amount
-        print(f"{self.name} regenerates 5 health! Current health: {self.health}")
+        if self.health <= self.max_health - 5:
+            self.health += 5  # Lower regeneration amount
+            print(f"{self.name} regenerates 5 health! Current health: {self.health}")
+        else:
+            print(f"{self.name} is at their max health of {self.max_health}. Here they come... \n")
 
 # *** END of CHARACTER CREATION FUNCTIONALITY *** # 
 
