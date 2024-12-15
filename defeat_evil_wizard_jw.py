@@ -74,9 +74,9 @@ class Mage(Character):
 
     def special_abilities(self, opponent):
         ability_choice = input("Which ability would you like to use? 1 - Cast Spell | 2 - Restore Spell  ")
-        if (ability_choice == 1):
+        if (ability_choice == "1"):
             self.cast_spell(opponent)
-        elif (ability_choice == 2):
+        elif (ability_choice == "2"):
             self.restore_spell()
 
     # Add your cast spell method here
@@ -97,16 +97,15 @@ class Archer(Character):
 
     def special_abilities(self, opponent):
         ability_choice = input("Which ability would you like to use? 1 - Quick Shot | 2 - Evade Attack  ")
-        if (ability_choice == 1):
+        if (ability_choice == "1"):
             self.quick_shot(opponent)
-        elif (ability_choice == 2):
+        elif (ability_choice == "2"):
             self.evade_attack()
 
     def quick_shot(self, opponent):
         special_attack_damage = self.attack_power * self.special_attack_multiplier()
         opponent.health -=  special_attack_damage
         print(f"{self.name} uses the Quick Shot against {opponent.name} for {special_attack_damage} damage!")
-        self.display_stats()
 
     def evade_attack(self):
         if (self.attack_occurred):
@@ -120,9 +119,9 @@ class Paladin(Character):
 
     def special_abilities(self, opponent):
         ability_choice = input("Which ability would you like to use? 1 - Holy Strike | 2 - Divine Shield  ")
-        if (ability_choice == 1):
+        if (ability_choice == "1"):
             self.holy_strike(opponent)
-        elif (ability_choice == 2):
+        elif (ability_choice == "2"):
             self.divine_shield()
 
     def holy_strike(self, opponent):
@@ -206,8 +205,14 @@ def battle(player, wizard):
             print(f"{player.name} has been defeated!")
             break
 
-    if wizard.health <= 0:
-        print(f"{wizard.name} has been defeated by {player.name}!")
+    if wizard.health <= 0 or player.health <= 0:
+        print("\n*********************")
+        if (wizard.health <= 0):
+            print(f"{wizard.name} has been defeated by {player.name}!")
+        else:
+            print(f"{player.name} has been defeated by {wizard.name}!")
+        print("Thank you for playing the Defeat the Evil Wizard by JeniDub")
+        print("*********************\n")
 
 ## MAIN GAME FUNCTION ##
 # Main function to handle the flow of the game
