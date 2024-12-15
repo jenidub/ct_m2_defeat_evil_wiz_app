@@ -62,8 +62,8 @@ The game includes:
 - Special attack multipliers enhance strategic decisions.
 
 ## Credits
-Created by **JeniDub** as the Module 2 project for **Coding Temple**
-README file created using **ChatGPT** with edits by **JeniDub**
+- Created by **JeniDub** as the Module 2 project for **Coding Temple**
+- README file created using **ChatGPT** with edits by **JeniDub**
 
 ## License
 This project is licensed under the MIT License. Feel free to modify and distribute the game.
